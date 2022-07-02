@@ -1,0 +1,22 @@
+type JWT {
+  jwt: String!
+}
+
+type User {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+}
+
+type Mutation {
+  jwt(email: String!, password: String!): JWT
+  register(
+    firstName: String!
+    lastName: String!
+    password: String!
+    email: String!
+    albums: [ID]
+  ): User
+}

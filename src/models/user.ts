@@ -5,3 +5,7 @@ export interface IUser {
   password: string;
   email: string;
 }
+
+export interface IJwt {
+  jwt: string;
+}

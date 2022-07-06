@@ -5,3 +5,5 @@ export * from './favourite';
 export * from './genre';
 export * from './track';
 export * from './user';
+export * from './utils';
+export * from './pagination';

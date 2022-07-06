@@ -4,19 +4,24 @@ type JWT {
 
 type User {
   id: ID!
+  email: String!
   firstName: String
   lastName: String
-  email: String
   password: String
 }
 
-type Mutation {
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  password: String!
+  email: String!
+}
+
+type Query {
   jwt(email: String!, password: String!): JWT
-  register(
-    firstName: String!
-    lastName: String!
-    password: String!
-    email: String!
-    albums: [ID]
-  ): User
+  user(id: ID!): User
+}
+
+type Mutation {
+  register(input: CreateUserInput): User
 }

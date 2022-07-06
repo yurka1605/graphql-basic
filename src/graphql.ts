@@ -7,6 +7,41 @@
 
 /* tslint:disable */
 /* eslint-disable */
+export class PaginationInput {
+    limit?: Nullable<number>;
+    offset?: Nullable<number>;
+}
+
+export class CreateTrackInput {
+    title: string;
+    albumId: string;
+    duration: number;
+    genresIds: Nullable<string>[];
+    released: number;
+    bandsIds?: Nullable<Nullable<string>[]>;
+}
+
+export class UpdateTrackInput {
+    title?: Nullable<string>;
+    albumId?: Nullable<string>;
+    duration?: Nullable<number>;
+    genresIds?: Nullable<Nullable<string>[]>;
+    released?: Nullable<number>;
+    bandsIds?: Nullable<Nullable<string>[]>;
+}
+
+export class CreateUserInput {
+    firstName: string;
+    lastName: string;
+    password: string;
+    email: string;
+}
+
+export class DeleteResponse {
+    acknowledged?: Nullable<boolean>;
+    deletedCount?: Nullable<number>;
+}
+
 export class Album {
     id: string;
     name?: Nullable<string>;
@@ -63,7 +98,7 @@ export class Genre {
 }
 
 export class Track {
-    _id: string;
+    id: string;
     title: string;
     albums?: Nullable<Nullable<Album>[]>;
     bands?: Nullable<Nullable<Band>[]>;
@@ -72,20 +107,31 @@ export class Track {
     genres?: Nullable<Nullable<Genre>[]>;
 }
 
+export class PaginationTracks {
+    items?: Nullable<Nullable<Track>[]>;
+    offset?: Nullable<string>;
+    limit?: Nullable<string>;
+    total?: Nullable<string>;
+}
+
 export abstract class IQuery {
     abstract track(id: string): Nullable<Track> | Promise<Nullable<Track>>;
 
-    abstract tracks(limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Nullable<Track>[]> | Promise<Nullable<Nullable<Track>[]>>;
-}
-
-export abstract class IMutation {
-    abstract createTrack(title: string, album: string, duration: number, genres: Nullable<string>[], released: number): Nullable<Track> | Promise<Nullable<Track>>;
-
-    abstract deleteTrack(_id: string): Nullable<string> | Promise<Nullable<string>>;
+    abstract tracks(input?: Nullable<PaginationInput>): Nullable<PaginationTracks> | Promise<Nullable<PaginationTracks>>;
 
     abstract jwt(email: string, password: string): Nullable<JWT> | Promise<Nullable<JWT>>;
 
-    abstract register(firstName: string, lastName: string, password: string, email: string, albums?: Nullable<Nullable<string>[]>): Nullable<User> | Promise<Nullable<User>>;
+    abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
+}
+
+export abstract class IMutation {
+    abstract createTrack(input: CreateTrackInput): Nullable<Track> | Promise<Nullable<Track>>;
+
+    abstract updateTrack(id: string, input: UpdateTrackInput): Nullable<Track> | Promise<Nullable<Track>>;
+
+    abstract deleteTrack(id: string): Nullable<DeleteResponse> | Promise<Nullable<DeleteResponse>>;
+
+    abstract register(input?: Nullable<CreateUserInput>): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class JWT {
@@ -94,9 +140,9 @@ export class JWT {
 
 export class User {
     id: string;
+    email: string;
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
-    email?: Nullable<string>;
     password?: Nullable<string>;
 }
 

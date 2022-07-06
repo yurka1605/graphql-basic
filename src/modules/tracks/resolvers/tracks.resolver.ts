@@ -1,5 +1,9 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { IPagination, ITrack } from 'src/models';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { TracksService } from '../services/tracks.service';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Token } from 'src/decorators/token.decorator';
 
 @Resolver('Track')
 export class TracksResolver {
@@ -13,10 +17,41 @@ export class TracksResolver {
   }
 
   @Query()
-  async tracks(
-    @Args('limit') limit: number,
-    @Args('id') offset: number
+  async tracks(@Args('input') data: IPagination) {
+    return this.tracksService.findAll(data);
+  }
+
+  // @ResolveField()
+  // async posts(@Parent() ) {
+  //   const { id } = author;
+  //   return this.postsService.findAll({ authorId: id }); 
+  // }
+
+  @UseGuards(AuthGuard)
+  @Mutation()
+  async createTrack(
+    @Token() token: string,
+    @Args('input') data: Partial<ITrack>
   ) {
-    return this.tracksService.findAll(limit, offset);
+    return this.tracksService.create(data, token);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation()
+  async updateTrack(
+    @Token() token: string,
+    @Args('id') id: string,
+    @Args('input') data: Partial<ITrack>
+  ) {
+    return this.tracksService.update(id, data, token);
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation()
+  async deleteTrack(
+    @Args('id') id: string,
+    @Token() token: string,
+  ) {
+    return this.tracksService.delete(id, token);
   }
 }

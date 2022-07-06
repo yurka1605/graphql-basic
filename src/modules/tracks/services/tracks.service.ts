@@ -1,18 +1,13 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { AxiosResponse } from 'axios';
-import { Observable } from 'rxjs';
-import { ITrack } from 'src/models';
+import { ITrack, ITracks } from 'src/models';
+import { BaseEntityService } from 'src/services';
 
 @Injectable()
-export class TracksService {
-  constructor(private readonly http: HttpService) { }
+export class TracksService extends BaseEntityService<ITrack, ITracks> {
+  protected BASE_URL: string = process.env.TRACKS_URL;
 
-  findAll(limit: number, offset: number): Observable<AxiosResponse<ITrack[]>> {
-    return this.http.get<ITrack[]>(process.env.TRACKS_URL);
-  }
-
-  findOneById(id: string): Observable<AxiosResponse<ITrack>> {
-    return this.http.get<ITrack>(`${process.env.TRACKS_URL}/${id}`);
+  constructor(protected http: HttpService) {
+    super(http);
   }
 }

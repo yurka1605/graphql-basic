@@ -7,3 +7,10 @@ export interface ITrack {
   released: number;
   genresIds: string[];
 }
+
+export interface ITracks {
+  items: ITrack[],
+  limit: string,
+  offset: string,
+  total: number
+}

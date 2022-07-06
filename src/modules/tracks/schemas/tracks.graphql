@@ -1,5 +1,5 @@
 type Track {
-  _id: ID!
+  id: ID!
   title: String!
   albums: [Album]
   bands: [Band]
@@ -8,12 +8,38 @@ type Track {
   genres: [Genre]
 }
 
+input CreateTrackInput {
+  title: String!
+  albumId: ID!
+  duration: Int!
+  genresIds: [ID]!
+  released: Int!
+  bandsIds: [ID]
+}
+
+input UpdateTrackInput {
+  title: String
+  albumId: ID
+  duration: Int
+  genresIds: [ID]
+  released: Int
+  bandsIds: [ID]
+}
+
+type PaginationTracks {
+  items: [Track]
+  offset: String
+  limit: String
+  total: String
+}
+
 type Query {
   track(id: ID!): Track
-  tracks(limit: Int, offset: Int): [Track]
+  tracks(input: PaginationInput): PaginationTracks
 }
 
 type Mutation {
-  createTrack(title: String!, album: ID!, duration: Int!, genres: [ID]!, released: Int!): Track
-  deleteTrack(_id: ID!): String
+  createTrack(input: CreateTrackInput!): Track
+  updateTrack(id: ID!, input: UpdateTrackInput!): Track
+  deleteTrack(id: ID!): DeleteResponse
 }

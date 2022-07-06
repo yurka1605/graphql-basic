@@ -23,5 +23,6 @@ module.exports = {
     'array-bracket-spacing': ['warn', 'never'],
     'no-duplicate-imports': 'error',
     'prettier/prettier': 'off',
+    'no-console': ['warn'],
   },
 };

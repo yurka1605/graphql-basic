@@ -3,7 +3,6 @@ import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TracksModule } from './modules/tracks/tracks.module';
-import { HttpModule } from '@nestjs/axios';
 import { UsersModule } from './modules/users/user.module';
 
 @Module({

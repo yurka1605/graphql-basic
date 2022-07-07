@@ -1,5 +1,5 @@
 export interface IGenre {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   country: string;

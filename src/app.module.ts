@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TracksModule } from './modules/tracks/tracks.module';
 import { UsersModule } from './modules/users/user.module';
+import { GenresModule } from './modules/genres/genres.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from './modules/users/user.module';
     }),
     TracksModule,
     UsersModule,
+    GenresModule,
   ],
   controllers: [],
   providers: [],

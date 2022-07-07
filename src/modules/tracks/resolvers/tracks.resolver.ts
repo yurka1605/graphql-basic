@@ -1,35 +1,56 @@
-import { IPagination, ITrack } from 'src/models';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { TracksService } from '../services/tracks.service';
 import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { TracksService } from '../services/tracks.service';
+import { IPagination, ITrack } from 'src/models';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Token } from 'src/decorators/token.decorator';
+import { GenresService } from 'src/modules/genres/services/genres.service';
+import { forkJoin, of } from 'rxjs';
 
 @Resolver('Track')
 export class TracksResolver {
   constructor(
     private readonly tracksService: TracksService,
+    private readonly genresService: GenresService,
   ) { }
 
   @Query()
-  async track(@Args('id') id: string) {
+  track(@Args('id') id: string) {
     return this.tracksService.findOneById(id);
   }
 
   @Query()
-  async tracks(@Args('input') data: IPagination) {
+  tracks(@Args('input') data: IPagination) {
     return this.tracksService.findAll(data);
   }
 
+  @Resolver()
+  @ResolveField()
+  genres(@Parent() { genresIds }: ITrack) {
+    return genresIds.length ?
+      forkJoin(genresIds.map(id => this.genresService.findOneById(id))) :
+      of(genresIds);
+  }
+
+  // @Resolver()
   // @ResolveField()
-  // async posts(@Parent() ) {
-  //   const { id } = author;
-  //   return this.postsService.findAll({ authorId: id }); 
+  // bands(@Parent() { bandIds }: ITrack) {
+  //   return bandIds.length ?
+  //     forkJoin(bandIds.map(id => this.bandsService.findOneById(id))) :
+  //     of(bandIds);
+  // }
+
+  // @Resolver()
+  // @ResolveField()
+  // bands(@Parent() { artistIds }: ITrack) {
+  //   return artistIds.length ?
+  //     forkJoin(artistIds.map(id => this.artistsService.findOneById(id))) :
+  //     of(artistIds);
   // }
 
   @UseGuards(AuthGuard)
   @Mutation()
-  async createTrack(
+  createTrack(
     @Token() token: string,
     @Args('input') data: Partial<ITrack>
   ) {
@@ -38,7 +59,7 @@ export class TracksResolver {
 
   @UseGuards(AuthGuard)
   @Mutation()
-  async updateTrack(
+  updateTrack(
     @Token() token: string,
     @Args('id') id: string,
     @Args('input') data: Partial<ITrack>
@@ -48,7 +69,7 @@ export class TracksResolver {
 
   @UseGuards(AuthGuard)
   @Mutation()
-  async deleteTrack(
+  deleteTrack(
     @Args('id') id: string,
     @Token() token: string,
   ) {

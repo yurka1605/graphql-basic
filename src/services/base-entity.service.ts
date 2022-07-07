@@ -1,29 +1,19 @@
-import { IPagination } from '../models';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AuthHeaderKeyName } from 'src/helpers';
+import { IPagination, IEntityPagination } from 'src/models';
 
 @Injectable()
-export abstract class BaseEntityService<T, D> {
+export abstract class BaseEntityService<T> {
   protected abstract BASE_URL: string;
 
   constructor(protected http: HttpService) { }
 
-  public findAll({ limit, offset }: IPagination) {
-    let paginationUrl = this.BASE_URL;
-    if (limit || offset) {
-      paginationUrl += '?';
-    }
-
-    if (limit) {
-      paginationUrl += `limit=${limit}`;
-    }
-
-    if (offset) {
-      paginationUrl += `offset=${offset}`;
-    }
-
-    return this.http.get<D>(paginationUrl);
+  public findAll(data?: IPagination) {
+    const queryParams = data ? this.getQueryString(Object.entries(data)) : '';
+    return this.http.get<IEntityPagination<T>>(
+      `${this.BASE_URL}${queryParams ? `?${queryParams}` : queryParams}`
+    );
   }
 
   public findOneById(id: string) {
@@ -63,5 +53,16 @@ export abstract class BaseEntityService<T, D> {
         }
       }
     );
+  }
+
+  private getQueryString(params: Array<[string, string | number]>) {
+    return params.reduce((queryParams: string, [key, value]: [string, string | number]) => {
+      if (value || (typeof value === 'number' && value === 0)) {
+        const paramString = `${key}=${value}`;
+        queryParams += queryParams ? `&${paramString}` : paramString;
+      }
+
+      return queryParams;
+    }, '');
   }
 }

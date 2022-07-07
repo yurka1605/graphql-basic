@@ -20,16 +20,9 @@ input UpdateGenreInput {
   year: Int
 }
 
-type PaginationGenres {
-  items: [Genre]
-  offset: String
-  limit: String
-  total: String
-}
-
 type Query {
   genre(id: ID!): Genre
-  genres(input: PaginationInput): PaginationGenres
+  genres(input: PaginationInput): [Genre]
 }
 
 type Mutation {

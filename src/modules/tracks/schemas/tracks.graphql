@@ -26,16 +26,9 @@ input UpdateTrackInput {
   bandsIds: [ID]
 }
 
-type PaginationTracks {
-  items: [Track]
-  offset: String
-  limit: String
-  total: String
-}
-
 type Query {
   track(id: ID!): Track
-  tracks(input: PaginationInput): PaginationTracks
+  tracks(input: PaginationInput): [Track]
 }
 
 type Mutation {

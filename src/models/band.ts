@@ -1,8 +1,14 @@
 export interface IBand {
-  _id: string;
+  id: string;
   name: string;
   origin: string;
-  membersId: string[];
+  members: IMember[];
   website: string;
   genresIds: string[];
+}
+
+export interface IMember {
+  artist: string
+  instrument: string
+  years: string[]
 }

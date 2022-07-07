@@ -10,20 +10,20 @@ export abstract class BaseEntityService<T, D> {
   constructor(protected http: HttpService) { }
 
   public findAll({ limit, offset }: IPagination) {
-    let tracksUrl = this.BASE_URL;
+    let paginationUrl = this.BASE_URL;
     if (limit || offset) {
-      tracksUrl += '?';
+      paginationUrl += '?';
     }
 
     if (limit) {
-      tracksUrl += `limit=${limit}`;
+      paginationUrl += `limit=${limit}`;
     }
 
     if (offset) {
-      tracksUrl += `offset=${offset}`;
+      paginationUrl += `offset=${offset}`;
     }
 
-    return this.http.get<D>(tracksUrl);
+    return this.http.get<D>(paginationUrl);
   }
 
   public findOneById(id: string) {

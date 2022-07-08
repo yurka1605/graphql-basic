@@ -7,8 +7,18 @@ export interface IBand {
   genresIds: string[];
 }
 
-export interface IMember {
-  artist: string
-  instrument: string
-  years: string[]
+interface IMemberResponse {
+  artist: string;
+  instrument: string;
+  years: string[];
+}
+
+export interface IMember extends IMemberResponse {
+  id: string;
+  firstName: string;
+  secondName: string;
+  middleName: string;
+  birthDate: string;
+  birthPlace: string;
+  country: string;
 }

@@ -8,7 +8,46 @@ type Band {
 }
 
 type Member {
-  artist: String!
+  id: ID!
+  firstName: String
+  secondName: String
+  middleName: String
+  birthDate: String
+  birthPlace: String
+  country: String
   instrument: String
   years: [String]
+}
+
+input MembersInput {
+  artist: ID!
+  instrument: String
+  years: [String]
+}
+
+input CreateBandInput {
+  name: String!
+  origin: String
+  members: [MembersInput]
+  website: String
+  genresIds: [ID]
+}
+
+input UpdateBandInput {
+  name: String
+  origin: String
+  members: [MembersInput]
+  website: String
+  genresIds: [ID]
+}
+
+type Query {
+  band(id: ID!): Band
+  bands(input: PaginationInput): [Band]
+}
+
+type Mutation {
+  createBand(input: CreateBandInput!): Band
+  updateBand(id: ID!, input: UpdateBandInput!): Band
+  deleteBand(id: ID!): DeleteResponse
 }

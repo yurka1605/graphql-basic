@@ -6,12 +6,16 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { Token } from 'src/decorators/token.decorator';
 import { GenresService } from 'src/modules/genres/services/genres.service';
 import { forkJoin, of } from 'rxjs';
+import { BandsService } from 'src/modules/bands/services/bands.service';
+import { ArtistsService } from 'src/modules/artists/services/artists.service';
 
 @Resolver('Track')
 export class TracksResolver {
   constructor(
     private readonly tracksService: TracksService,
     private readonly genresService: GenresService,
+    private readonly bandsService: BandsService,
+    private readonly artistsService: ArtistsService,
   ) { }
 
   @Query()
@@ -32,21 +36,21 @@ export class TracksResolver {
       of(genresIds);
   }
 
-  // @Resolver()
-  // @ResolveField()
-  // bands(@Parent() { bandIds }: ITrack) {
-  //   return bandIds.length ?
-  //     forkJoin(bandIds.map(id => this.bandsService.findOneById(id))) :
-  //     of(bandIds);
-  // }
+  @Resolver()
+  @ResolveField()
+  bands(@Parent() { bandsIds }: ITrack) {
+    return bandsIds.length ?
+      forkJoin(bandsIds.map(id => this.bandsService.findOneById(id))) :
+      of(bandsIds);
+  }
 
-  // @Resolver()
-  // @ResolveField()
-  // bands(@Parent() { artistIds }: ITrack) {
-  //   return artistIds.length ?
-  //     forkJoin(artistIds.map(id => this.artistsService.findOneById(id))) :
-  //     of(artistIds);
-  // }
+  @Resolver()
+  @ResolveField()
+  artists(@Parent() { artistsIds }: ITrack) {
+    return artistsIds.length ?
+      forkJoin(artistsIds.map(id => this.artistsService.findOneById(id))) :
+      of(artistsIds);
+  }
 
   @UseGuards(AuthGuard)
   @Mutation()

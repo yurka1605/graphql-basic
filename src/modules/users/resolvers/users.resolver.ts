@@ -9,7 +9,7 @@ export class UsersResolver {
   ) { }
 
   @Query()
-  async jwt(
+  jwt(
     @Args('email') email: string,
     @Args('password') password: string
   ) {
@@ -17,12 +17,12 @@ export class UsersResolver {
   }
 
   @Query()
-  async user(@Args('id') id: string) {
+  user(@Args('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
   @Mutation()
-  async register(@Args('input') data: Partial<IUser>) {
+  register(@Args('input') data: Partial<IUser>) {
     return this.usersService.create(data);
   }
 }

@@ -1,4 +1,4 @@
-import { pluck } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AuthHeaderKeyName } from 'src/helpers';
@@ -14,7 +14,7 @@ export abstract class BaseEntityService<T> {
     const queryParams = data ? this.getQueryString(Object.entries(data)) : '';
     return this.http.get<IEntityPagination<T>>(
       `${this.BASE_URL}${queryParams ? `?${queryParams}` : queryParams}`
-    ).pipe(pluck('items'));
+    ).pipe(map(res => res['items']));
   }
 
   public findOneById(id: string) {

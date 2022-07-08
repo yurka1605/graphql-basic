@@ -12,18 +12,18 @@ export class GenresResolver {
   ) { }
 
   @Query()
-  async genre(@Args('id') id: string) {
+  genre(@Args('id') id: string) {
     return this.genresService.findOneById(id);
   }
 
   @Query()
-  async genres(@Args('input') data: IPagination) {
+  genres(@Args('input') data: IPagination) {
     return this.genresService.findAll(data);
   }
 
   @UseGuards(AuthGuard)
   @Mutation()
-  async createGenre(
+  createGenre(
     @Token() token: string,
     @Args('input') data: Partial<IGenre>
   ) {
@@ -32,7 +32,7 @@ export class GenresResolver {
 
   @UseGuards(AuthGuard)
   @Mutation()
-  async updateGenre(
+  updateGenre(
     @Token() token: string,
     @Args('id') id: string,
     @Args('input') data: Partial<IGenre>
@@ -42,7 +42,7 @@ export class GenresResolver {
 
   @UseGuards(AuthGuard)
   @Mutation()
-  async deleteGenre(
+  deleteGenre(
     @Args('id') id: string,
     @Token() token: string,
   ) {

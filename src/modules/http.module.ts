@@ -1,5 +1,5 @@
 import { HttpModule as BaseHttpModule, HttpService } from '@nestjs/axios';
-import { Logger, Module, OnModuleInit } from '@nestjs/common';
+import { HttpException, Logger, Module, OnModuleInit } from '@nestjs/common';
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { IdsKeyNames } from '../models';
 
@@ -31,9 +31,11 @@ export class HttpModule implements OnModuleInit {
         this.replaceIdKeys(data);
         return data;
       },
-      (err) => {
-        logger.error(err);
-        return Promise.reject(err);
+      (e) => {
+        const { status, data } = e.response;
+        const { statusCode, error, message } = data;
+        logger.error(`${statusCode} ${error} - ${message}`);
+        throw new HttpException(data, status);
       });
   }
 

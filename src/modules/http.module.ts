@@ -39,7 +39,8 @@ export class HttpModule implements OnModuleInit {
         logger.error(`${statusCode} ${error} - ${message}`);
 
         if (status === 500) {
-          data.message = 'Unhandled microservice error. Check the correctness of the entered data';
+          const serviceName = e.request.path.split('/')[2].toUpperCase();
+          data.message = `Unhandled '${serviceName}' microservice error. Check the correctness of the entered data`;
         }
 
         throw new HttpException(data, status);

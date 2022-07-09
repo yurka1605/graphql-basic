@@ -12,13 +12,33 @@ export class PaginationInput {
     offset?: Nullable<number>;
 }
 
+export class CreateAlbumInput {
+    name: string;
+    released?: Nullable<number>;
+    artistsIds?: Nullable<Nullable<string>[]>;
+    bandsIds?: Nullable<Nullable<string>[]>;
+    trackIds?: Nullable<Nullable<string>[]>;
+    genresIds?: Nullable<Nullable<string>[]>;
+    image?: Nullable<string>;
+}
+
+export class UpdateAlbumInput {
+    name?: Nullable<string>;
+    released?: Nullable<number>;
+    artistsIds?: Nullable<Nullable<string>[]>;
+    bandsIds?: Nullable<Nullable<string>[]>;
+    trackIds?: Nullable<Nullable<string>[]>;
+    genresIds?: Nullable<Nullable<string>[]>;
+    image?: Nullable<string>;
+}
+
 export class CreateArtistInput {
     firstName: string;
     secondName: string;
+    country: string;
     middleName?: Nullable<string>;
     birthDate?: Nullable<string>;
     birthPlace?: Nullable<string>;
-    country?: Nullable<string>;
     bandsIds?: Nullable<Nullable<string>[]>;
     instruments?: Nullable<Nullable<string>[]>;
 }
@@ -113,19 +133,11 @@ export class Album {
     image?: Nullable<string>;
 }
 
-export class Artist {
-    id: string;
-    firstName?: Nullable<string>;
-    secondName?: Nullable<string>;
-    middleName?: Nullable<string>;
-    birthDate?: Nullable<string>;
-    birthPlace?: Nullable<string>;
-    country?: Nullable<string>;
-    bands?: Nullable<Nullable<Band>[]>;
-    instruments?: Nullable<Nullable<string>[]>;
-}
-
 export abstract class IQuery {
+    abstract album(id: string): Nullable<Album> | Promise<Nullable<Album>>;
+
+    abstract albums(input?: Nullable<PaginationInput>): Nullable<Nullable<Album>[]> | Promise<Nullable<Nullable<Album>[]>>;
+
     abstract artist(id: string): Nullable<Artist> | Promise<Nullable<Artist>>;
 
     abstract artists(input?: Nullable<PaginationInput>): Nullable<Nullable<Artist>[]> | Promise<Nullable<Nullable<Artist>[]>>;
@@ -148,6 +160,12 @@ export abstract class IQuery {
 }
 
 export abstract class IMutation {
+    abstract createAlbum(input: CreateAlbumInput): Nullable<Album> | Promise<Nullable<Album>>;
+
+    abstract updateAlbum(id: string, input: UpdateAlbumInput): Nullable<Album> | Promise<Nullable<Album>>;
+
+    abstract deleteAlbum(id: string): Nullable<DeleteResponse> | Promise<Nullable<DeleteResponse>>;
+
     abstract createArtist(input: CreateArtistInput): Nullable<Artist> | Promise<Nullable<Artist>>;
 
     abstract updateArtist(id: string, input: UpdateArtistInput): Nullable<Artist> | Promise<Nullable<Artist>>;
@@ -172,7 +190,19 @@ export abstract class IMutation {
 
     abstract deleteTrack(id: string): Nullable<DeleteResponse> | Promise<Nullable<DeleteResponse>>;
 
-    abstract register(input?: Nullable<CreateUserInput>): Nullable<User> | Promise<Nullable<User>>;
+    abstract register(input: CreateUserInput): Nullable<User> | Promise<Nullable<User>>;
+}
+
+export class Artist {
+    id: string;
+    firstName?: Nullable<string>;
+    secondName?: Nullable<string>;
+    middleName?: Nullable<string>;
+    birthDate?: Nullable<string>;
+    birthPlace?: Nullable<string>;
+    country?: Nullable<string>;
+    bands?: Nullable<Nullable<Band>[]>;
+    instruments?: Nullable<Nullable<string>[]>;
 }
 
 export class Band {

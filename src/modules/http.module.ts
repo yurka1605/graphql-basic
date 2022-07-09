@@ -28,13 +28,20 @@ export class HttpModule implements OnModuleInit {
         config['metadata'] = { ...config['metadata'], endDate: new Date() };
         const duration = config['metadata'].endDate.getTime() - config['metadata'].startDate.getTime();
         logger.log(`${config.method.toUpperCase()} ${config.url} ${duration}ms`);
-        this.replaceIdKeys(data);
-        return data;
+        if (data) {
+          this.replaceIdKeys(data);
+        }
+        return data || null;
       },
       (e) => {
         const { status, data } = e.response;
         const { statusCode, error, message } = data;
         logger.error(`${statusCode} ${error} - ${message}`);
+
+        if (status === 500) {
+          data.message = 'Unhandled microservice error. Check the correctness of the entered data';
+        }
+
         throw new HttpException(data, status);
       });
   }

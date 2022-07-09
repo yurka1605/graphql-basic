@@ -6,3 +6,10 @@ export interface IFavourite {
   artistsIds: string[];
   tracksIds: string[];
 }
+
+type favouritesTypes = 'artists' | 'genres' | 'bands' | 'tracks';
+
+export interface IFavoriteAddInput {
+  id: string;
+  type: favouritesTypes;
+}

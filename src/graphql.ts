@@ -146,6 +146,8 @@ export abstract class IQuery {
 
     abstract bands(input?: Nullable<PaginationInput>): Nullable<Nullable<Band>[]> | Promise<Nullable<Nullable<Band>[]>>;
 
+    abstract favourites(): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
     abstract genre(id: string): Nullable<Genre> | Promise<Nullable<Genre>>;
 
     abstract genres(input?: Nullable<PaginationInput>): Nullable<Nullable<Genre>[]> | Promise<Nullable<Nullable<Genre>[]>>;
@@ -177,6 +179,14 @@ export abstract class IMutation {
     abstract updateBand(id: string, input: UpdateBandInput): Nullable<Band> | Promise<Nullable<Band>>;
 
     abstract deleteBand(id: string): Nullable<DeleteResponse> | Promise<Nullable<DeleteResponse>>;
+
+    abstract addTrackToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract addBandToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract addArtistToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract addGenreToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
 
     abstract createGenre(input: CreateGenreInput): Nullable<Genre> | Promise<Nullable<Genre>>;
 

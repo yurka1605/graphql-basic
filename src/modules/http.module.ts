@@ -47,7 +47,7 @@ export class HttpModule implements OnModuleInit {
       });
   }
 
-  replaceIdKeys(data: any) {
+  private replaceIdKeys(data: any) {
     Object.entries(data).forEach(([key, value]: [string, any]) => {
       if (key === IdsKeyNames.API) {
         data[IdsKeyNames.TYPES] = data[IdsKeyNames.API];

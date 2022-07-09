@@ -1,5 +1,5 @@
 export interface IFavourite {
-  _id: string;
+  id: string;
   userId: string;
   bandsIds: string[];
   genresIds: string[];

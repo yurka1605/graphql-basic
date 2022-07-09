@@ -23,5 +23,5 @@ type Query {
 }
 
 type Mutation {
-  register(input: CreateUserInput): User
+  register(input: CreateUserInput!): User
 }

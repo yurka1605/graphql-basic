@@ -1,5 +1,5 @@
 export interface IAlbum {
-  _id: string;
+  id: string;
   name: string;
   released: number;
   artistsIds: string[];

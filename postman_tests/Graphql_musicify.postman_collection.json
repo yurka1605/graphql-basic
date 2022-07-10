@@ -1,0 +1,990 @@
+{
+	"info": {
+		"_postman_id": "fbd19a03-db98-4112-847a-4ee3da863b03",
+		"name": "Graphql musicify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9479995"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "jwt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.jwt){\r",
+									"    postman.setEnvironmentVariable(\"auth_token\", resp.data.jwt.jwt);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    jwt(\r\n      email: \"{{email}}\", \r\n      password: \"{{password}}\"\r\n    ) {\r\n      jwt\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.register?.id){\r",
+									"    postman.setEnvironmentVariable(\"user_id\", resp?.data?.register?.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreateUserInput!) {\r\n    register(\r\n      input: $input\r\n    ) {\r\n      id\r\n      firstName\r\n      lastName\r\n      email\r\n      password\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\": {\r\n        \"firstName\": \"{{$randomFirstName}}\",\r\n        \"lastName\": \"{{$randomLastName}}\",\r\n        \"password\": \"{{password}}\",\r\n        \"email\": \"{{email}}\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    user(id: \"{{user_id}}\") {\r\n      id\r\n      firstName\r\n      lastName\r\n      password\r\n      email\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genres",
+			"item": [
+				{
+					"name": "genres",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    genres(input: {\r\n      limit: 10,\r\n      offset: 0\r\n    }) {\r\n      id\r\n      name\r\n      description\r\n      country\r\n      year\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createGenre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.createGenre?.id){\r",
+									"    postman.setEnvironmentVariable(\"genre_id\", resp?.data?.createGenre?.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreateGenreInput!) {\r\n    createGenre(input: $input) {\r\n      id\r\n      name\r\n      description\r\n      country\r\n      year\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\": {\r\n      \"name\": \"Genre {{$randomProductName}}\",\r\n      \"description\": \"Genre description\",\r\n      \"country\": \"{{$randomCountry}}\",\r\n      \"year\": 1970\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "genre",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "  {\r\n    genre(id: \"{{genre_id}}\") {\r\n      id\r\n      name\r\n      description\r\n      country\r\n      year\r\n    }\r\n  }",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateGenre",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: UpdateGenreInput!) {\r\n    updateGenre(\r\n      id: \"{{genre_id}}\"\r\n      input: $input\r\n    ) {\r\n      id\r\n      name\r\n      description\r\n      country\r\n      year\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\": {\r\n        \"name\": \"new genre name\",\r\n        \"description\": \"genre descriptions was changed\",\r\n        \"country\": \"country was changed\",\r\n        \"year\": 2000\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteGenre",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    deleteGenre(id: \"{{genre_id}}\") {\r\n      acknowledged,\r\n      deletedCount\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Artists",
+			"item": [
+				{
+					"name": "artists",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    artists(input: {\r\n      limit: 10,\r\n      offset: 0\r\n    }) {\r\n      id\r\n      firstName\r\n      secondName\r\n      middleName\r\n      birthDate\r\n      birthPlace\r\n      country\r\n      bands {\r\n        id\r\n        name\r\n        origin\r\n        website\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        members {\r\n            id\r\n            birthDate\r\n            secondName\r\n            middleName\r\n            firstName\r\n            birthPlace\r\n            country\r\n            instrument\r\n            years\r\n        }\r\n      }\r\n      instruments\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createArtist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.createArtist?.id){\r",
+									"    postman.setEnvironmentVariable(\"artist_id\", resp?.data?.createArtist?.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreateArtistInput!) {\r\n    createArtist(input: $input) {\r\n      id\r\n      firstName\r\n      secondName\r\n      middleName\r\n      birthDate\r\n      birthPlace\r\n      country\r\n      bands {\r\n        id\r\n        name\r\n        origin\r\n        website\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        members {\r\n            id\r\n            birthDate\r\n            secondName\r\n            middleName\r\n            firstName\r\n            birthPlace\r\n            country\r\n            instrument\r\n            years\r\n        }\r\n      }\r\n      instruments\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\":  {\r\n      \"firstName\": \"{{$randomFirstName}}\",\r\n      \"secondName\": \"{{$randomLastName}}\",\r\n      \"middleName\": \"Ivanovich\",\r\n      \"birthDate\": \"12/01/1980\",\r\n      \"birthPlace\": \"{{$randomCity}}\",\r\n      \"country\": \"{{$randomCountry}}\",\r\n      \"bandsIds\": [],\r\n      \"instruments\": [\"guitar\"]\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "artist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "  {\r\n    artist(id: \"{{artist_id}}\") {\r\n        id\r\n        firstName\r\n        secondName\r\n        middleName\r\n        birthDate\r\n        birthPlace\r\n        country\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n            genres {\r\n                id\r\n                name\r\n                description\r\n                country\r\n                year\r\n            }\r\n            members {\r\n                id\r\n                birthDate\r\n                secondName\r\n                middleName\r\n                firstName\r\n                birthPlace\r\n                country\r\n                instrument\r\n                years\r\n            }\r\n        }\r\n        instruments\r\n    }\r\n  }",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateArtist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: UpdateArtistInput!) {\r\n    updateArtist(\r\n      id: \"{{artist_id}}\"\r\n      input: $input\r\n    ) {\r\n      id\r\n      firstName\r\n      secondName\r\n      middleName\r\n      birthDate\r\n      birthPlace\r\n      country\r\n      bands {\r\n        id\r\n        name\r\n        origin\r\n        website\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        members {\r\n            id\r\n            birthDate\r\n            secondName\r\n            middleName\r\n            firstName\r\n            birthPlace\r\n            country\r\n            instrument\r\n            years\r\n        }\r\n      }\r\n      instruments\r\n    }\r\n}",
+								"variables": "{\r\n    \"input\": {\r\n      \"firstName\": \"{{$randomFirstName}} updated\",\r\n      \"secondName\": \"{{$randomLastName}} updated\",\r\n      \"middleName\": \"Ivanovich updated\",\r\n      \"birthDate\": \"12/01/2000\",\r\n      \"birthPlace\": \"{{$randomCity}} updated\",\r\n      \"country\": \"{{$randomCountry}} updated\",\r\n      \"bandsIds\": [\"{{band_id}}\"],\r\n      \"instruments\": [\"guitar\", \"violin\"]\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteGenre",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    deleteArtist(id: \"{{artist_id}}\") {\r\n      acknowledged,\r\n      deletedCount\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bands",
+			"item": [
+				{
+					"name": "bands",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    bands(input: {\r\n      limit: 10,\r\n      offset: 0\r\n    }) {\r\n      id\r\n      name\r\n      origin\r\n      website\r\n      genres {\r\n        id\r\n        name\r\n        description\r\n        country\r\n        year\r\n      }\r\n      members {\r\n        id\r\n        birthDate\r\n        secondName\r\n        middleName\r\n        firstName\r\n        birthPlace\r\n        country\r\n        instrument\r\n        years\r\n      }\r\n    }\r\n  }",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createBand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.createBand?.id){\r",
+									"    postman.setEnvironmentVariable(\"band_id\", resp?.data?.createBand?.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreateBandInput!) {\r\n    createBand(input: $input) {\r\n      id\r\n      name\r\n      origin\r\n      website\r\n      genres {\r\n        id\r\n        name\r\n        description\r\n        country\r\n        year\r\n      }\r\n      members {\r\n        id\r\n        birthDate\r\n        secondName\r\n        middleName\r\n        firstName\r\n        birthPlace\r\n        country\r\n        instrument\r\n        years\r\n      }\r\n    }\r\n}",
+								"variables": "{\r\n  \"input\": {\r\n        \"name\": \"Band {{$randomCompanyName}}\",\r\n        \"origin\": \"origin\",\r\n        \"website\": \"{{$randomDomainName}}\",\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"members\": [{\r\n            \"artist\": \"{{artist_id}}\",\r\n            \"instrument\": \"guitar\",\r\n            \"years\": [\"1970\", \"1986\"]\r\n        }]\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "band",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    band(id: \"{{band_id}}\") {\r\n      id\r\n      name\r\n      origin\r\n      website\r\n      genres {\r\n        id\r\n        name\r\n        description\r\n        country\r\n        year\r\n      }\r\n      members {\r\n        id\r\n        birthDate\r\n        secondName\r\n        middleName\r\n        firstName\r\n        birthPlace\r\n        country\r\n        instrument\r\n        years\r\n      }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateBand",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "  mutation($input: UpdateBandInput!) {\r\n    updateBand(id: \"{{band_id}}\", input: $input) {\r\n      id\r\n      name\r\n      website\r\n      genres {\r\n        id\r\n        description\r\n        country\r\n        year\r\n      }\r\n      members {\r\n        id\r\n        birthDate\r\n        secondName\r\n        middleName\r\n        firstName\r\n        birthPlace\r\n        country\r\n        instrument\r\n        years\r\n      }\r\n    }\r\n  }",
+								"variables": "{\r\n  \"input\": {\r\n        \"name\": \"Band name was updated\",\r\n        \"origin\": \"origin was updated\",\r\n        \"website\": \"{{$randomDomainName}} was updated\",\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"members\": []\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteBand",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    deleteBand(id: \"{{band_id}}\") {\r\n      acknowledged,\r\n      deletedCount\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "albums",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    albums(input: {\r\n      limit: 10,\r\n      offset: 0\r\n    }) {\r\n      id\r\n      name\r\n      released\r\n      artists {\r\n        id\r\n        firstName\r\n        secondName\r\n        middleName\r\n        birthDate\r\n        birthPlace\r\n        country\r\n        instruments\r\n      }\r\n      bands {\r\n        id\r\n        name\r\n        origin\r\n        website\r\n      }\r\n      tracks {\r\n        id\r\n        title\r\n        duration\r\n        released\r\n      }\r\n      genres {\r\n        id\r\n        name\r\n        description\r\n        country\r\n        year\r\n      }\r\n      image\r\n    }\r\n  }",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAlbum",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.createAlbum?.id){\r",
+									"    postman.setEnvironmentVariable(\"album_id\", resp?.data?.createAlbum?.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreateAlbumInput!) {\r\n    createAlbum(input: $input) {\r\n      id\r\n      name\r\n      released\r\n      artists {\r\n        id\r\n        firstName\r\n        secondName\r\n        middleName\r\n        birthDate\r\n        birthPlace\r\n        country\r\n        instruments\r\n      }\r\n      bands {\r\n        id\r\n        name\r\n        origin\r\n        website\r\n      }\r\n      tracks {\r\n        id\r\n        title\r\n        duration\r\n        released\r\n      }\r\n      genres {\r\n        id\r\n        name\r\n        description\r\n        country\r\n        year\r\n      }\r\n      image\r\n    }\r\n}",
+								"variables": "{\r\n  \"input\": {\r\n        \"name\": \"Album {{$randomProductName}}\",\r\n        \"released\": 1970,\r\n        \"artistsIds\": [],\r\n        \"bandsIds\": [],\r\n        \"trackIds\": [],\r\n        \"genresIds\": [],\r\n        \"image\": \"{{$randomImageUrl}}\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "album",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    album(id: \"{{album_id}}\") {\r\n        id\r\n        name\r\n        released\r\n        artists {\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        tracks {\r\n            id\r\n            title\r\n            duration\r\n            released\r\n        }\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        image\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAlbum",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "  mutation($input: UpdateAlbumInput!) {\r\n    updateAlbum(id: \"{{album_id}}\", input: $input) {\r\n        id\r\n        name\r\n        released\r\n        artists {\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        tracks {\r\n            id\r\n            title\r\n            duration\r\n            released\r\n        }\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        image\r\n    }\r\n  }",
+								"variables": "{\r\n  \"input\": {\r\n        \"name\": \"Album {{$randomProductName}} updated\",\r\n        \"released\": 2000,\r\n        \"artistsIds\": [\"{{artist_id}}\"],\r\n        \"bandsIds\": [\"{{band_id}}\"],\r\n        \"trackIds\": [\"{{track_id}}\"],\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"image\": \"{{$randomImageUrl}} updated\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAlbum",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    deleteAlbum(id: \"{{album_id}}\") {\r\n      acknowledged,\r\n      deletedCount\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracks",
+			"item": [
+				{
+					"name": "tracks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    tracks(input: {\r\n      limit: 10,\r\n      offset: 0\r\n    }) {\r\n        id\r\n        title\r\n        duration\r\n        released\r\n        album {\r\n            id\r\n            name\r\n            released\r\n            image\r\n        }\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        artists {\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n    }\r\n  }",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTrack",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let resp = JSON.parse(responseBody);\r",
+									"\r",
+									"if(resp?.data?.createTrack?.id){\r",
+									"    postman.setEnvironmentVariable(\"track_id\", resp?.data?.createTrack?.id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($input: CreateTrackInput!) {\r\n    createTrack(input: $input) {\r\n        id\r\n        title\r\n        duration\r\n        released\r\n        album {\r\n            id\r\n            name\r\n            released\r\n            image\r\n        }\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        artists {\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n    }\r\n}",
+								"variables": "{\r\n  \"input\": {\r\n        \"title\": \"Track {{$randomProductName}}\",\r\n        \"albumId\": \"{{album_id}}\",\r\n        \"duration\": 360,\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"bandsIds\": [\"{{band_id}}\"],\r\n        \"artistsIds\": [\"{{artist_id}}\"],\r\n        \"released\": 1970\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "track",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    track(id: \"{{track_id}}\") {\r\n        id\r\n        title\r\n        duration\r\n        released\r\n        album {\r\n            id\r\n            name\r\n            released\r\n            image\r\n        }\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        artists {\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTrack",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "  mutation($input: UpdateTrackInput!) {\r\n    updateTrack(id: \"{{track_id}}\", input: $input) {\r\n        id\r\n        title\r\n        duration\r\n        released\r\n        album {\r\n            id\r\n            name\r\n            released\r\n            image\r\n        }\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        genres {\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        artists {\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n    }\r\n  }",
+								"variables": "{\r\n  \"input\": {\r\n        \"title\": \"Track {{$randomProductName}} updated\",\r\n        \"albumId\": \"{{album_id}}\",\r\n        \"duration\": 720,\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"bandsIds\": [\"{{band_id}}\"],\r\n        \"artistsIds\": [\"{{artist_id}}\"],\r\n        \"released\": 2000\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTrack",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    deleteTrack(id: \"{{track_id}}\") {\r\n      acknowledged,\r\n      deletedCount\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favourites",
+			"item": [
+				{
+					"name": "favourites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n    favourites {\r\n        id\r\n\t    userId\r\n        bands {\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n        genres{\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n        artists{\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n        tracks{\r\n            id\r\n            title\r\n            duration\r\n            released\r\n        }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addTrackToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    addTrackToFavourites(id: \"{{track_id}}\") {\r\n        id\r\n\t    userId\r\n        tracks{\r\n            id\r\n            title\r\n            duration\r\n            released\r\n        }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addGenreToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    addGenreToFavourites(id: \"{{genre_id}}\") {\r\n        id\r\n\t    userId\r\n        genres{\r\n            id\r\n            name\r\n            description\r\n            country\r\n            year\r\n        }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addArtistToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    addArtistToFavourites(id: \"{{artist_id}}\") {\r\n        id\r\n\t    userId\r\n        artists{\r\n            id\r\n            firstName\r\n            secondName\r\n            middleName\r\n            birthDate\r\n            birthPlace\r\n            country\r\n            instruments\r\n        }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addBandToFavourites",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n    addBandToFavourites(id: \"{{band_id}}\") {\r\n        id\r\n\t    userId\r\n        bands{\r\n            id\r\n            name\r\n            origin\r\n            website\r\n        }\r\n    }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

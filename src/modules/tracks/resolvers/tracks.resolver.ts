@@ -8,6 +8,7 @@ import { GenresService } from 'src/modules/genres/services/genres.service';
 import { forkJoin, of } from 'rxjs';
 import { BandsService } from 'src/modules/bands/services/bands.service';
 import { ArtistsService } from 'src/modules/artists/services/artists.service';
+import { AlbumsService } from 'src/modules/albums/services/albums.service';
 
 @Resolver('Track')
 export class TracksResolver {
@@ -16,6 +17,7 @@ export class TracksResolver {
     private readonly genresService: GenresService,
     private readonly bandsService: BandsService,
     private readonly artistsService: ArtistsService,
+    private readonly albumService: AlbumsService,
   ) { }
 
   @Query()
@@ -26,6 +28,12 @@ export class TracksResolver {
   @Query()
   tracks(@Args('input') data: IPagination) {
     return this.tracksService.findAll(data);
+  }
+
+  @Resolver()
+  @ResolveField()
+  album(@Parent() { albumId }: ITrack) {
+    return this.albumService.findOneById(albumId);
   }
 
   @Resolver()

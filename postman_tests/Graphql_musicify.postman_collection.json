@@ -507,7 +507,7 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "  mutation($input: UpdateBandInput!) {\r\n    updateBand(id: \"{{band_id}}\", input: $input) {\r\n      id\r\n      name\r\n      website\r\n      genres {\r\n        id\r\n        description\r\n        country\r\n        year\r\n      }\r\n      members {\r\n        id\r\n        birthDate\r\n        secondName\r\n        middleName\r\n        firstName\r\n        birthPlace\r\n        country\r\n        instrument\r\n        years\r\n      }\r\n    }\r\n  }",
-								"variables": "{\r\n  \"input\": {\r\n        \"name\": \"Band name was updated\",\r\n        \"origin\": \"origin was updated\",\r\n        \"website\": \"{{$randomDomainName}} was updated\",\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"members\": []\r\n    }\r\n}"
+								"variables": "{\r\n  \"input\": {\r\n        \"name\": \"Band name was updated\",\r\n        \"origin\": \"origin was updated\",\r\n        \"website\": \"{{$randomDomainName}} was updated\",\r\n        \"genresIds\": [\"{{genre_id}}\"],\r\n        \"members\": [{\r\n            \"artist\": \"{{artist_id}}\",\r\n            \"instrument\": \"guitar\",\r\n            \"years\": [\"1986\", \"1987\", \"1989\"]\r\n        }]\r\n    }\r\n}"
 							}
 						},
 						"url": {
